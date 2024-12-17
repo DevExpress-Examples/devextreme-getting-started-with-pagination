@@ -1,3 +1,24 @@
-<div class="default-style">
-  <dx-button [text]="buttonText" (onClick)="onClick($event)"></dx-button>
+<div class="container">
+  <dx-load-panel
+    [(visible)]="loadPanelVisible"
+    [showIndicator]="true"
+    [showPane]="true"
+    [hideOnOutsideClick]="false"
+    ><dxo-position my="top" at="top" of="#cards"> </dxo-position>
+  </dx-load-panel>
+  <dx-pagination
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [itemCount]="total"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    (pageIndexChange)="onPageIndexChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  >
+  </dx-pagination>
+  <div id="cards">
+    <ng-container *ngFor="let color of visibleCards">
+      <img [src]="color.image" [alt]="color.name" />
+    </ng-container>
+  </div>
 </div>
