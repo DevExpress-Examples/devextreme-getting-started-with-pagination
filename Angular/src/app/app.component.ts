@@ -16,28 +16,26 @@ export class AppComponent {
   colors: Color[] = [];
 
   visibleCards: Color[] = [];
-  
+
   pageIndex = 3;
-  
+
   pageSize = 5;
-  
-  constructor(private colorService: ColorService) {}
+
+  constructor(private readonly colorService: ColorService) {}
 
   ngOnInit(): void {
-    this.generateColors();
+    void this.generateColors();
   }
 
-  async generateColors() {
+  async generateColors(): Promise<void> {
     this.loadPanelVisible = true;
     const promises: Promise<any>[] = [];
 
     for (let i = 0; i < this.total; i++) {
       const hex = this.colorService.getRandomPastelColor();
       const promise = firstValueFrom(
-        this.colorService.fetchColorData(hex)
-      ).then((data) => {
-        return { name: data.name.value, image: data.image.bare };
-      });
+        this.colorService.fetchColorData(hex),
+      ).then((data) => ({ name: data.name.value, image: data.image.bare }));
 
       promises.push(promise);
     }
@@ -46,25 +44,23 @@ export class AppComponent {
       this.colors = await Promise.all(promises);
     } catch (error) {
       console.error('Error generating colors:', error);
-    }
-    finally {
+    } finally {
       this.setVisibleCards();
       this.loadPanelVisible = false;
     }
   }
 
-  onPageIndexChange(val: number) {
+  onPageIndexChange(val: number): void {
     this.pageIndex = val;
     this.setVisibleCards();
   }
 
-  onPageSizeChange(val: number) {
+  onPageSizeChange(val: number): void {
     this.pageSize = val;
     this.setVisibleCards();
   }
 
-  setVisibleCards() {
+  setVisibleCards(): void {
     this.visibleCards = this.colors.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize);
   }
-
 }

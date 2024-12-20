@@ -12,7 +12,7 @@ export class ColorService {
   constructor(private readonly http: HttpClient) { }
 
   private hsvToHex(h: number, s: number, v: number): string {
-    let r = 0; 
+    let r = 0;
     let g = 0;
     let b = 0;
     const i = Math.floor(h / 60);
@@ -30,7 +30,7 @@ export class ColorService {
       case 5: [r, g, b] = [v, p, q]; break;
     }
 
-    const toHex = (x: number) => Math.round(x * 255).toString(16).padStart(2, '0');
+    const toHex = (x: number): string => Math.round(x * 255).toString(16).padStart(2, '0');
     return `${toHex(r)}${toHex(g)}${toHex(b)}`;
   }
 
@@ -41,12 +41,12 @@ export class ColorService {
     return this.hsvToHex(hue, saturation, brightness);
   }
 
-  fetchColorData(hex: string): Observable<any> {
-    return this.http.get(`${this.apiEndpoint}${hex}`).pipe(
+  fetchColorData(hex: string): Observable<Color> {
+    return this.http.get<Color>(`${this.apiEndpoint}${hex}`).pipe(
       catchError((error) => {
         console.error(`Error fetching color for hex ${hex}:`, error);
         return throwError(() => error);
-      })
+      }),
     );
   }
 }

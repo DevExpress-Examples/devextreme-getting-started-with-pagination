@@ -3,14 +3,14 @@ let colors = [];
 const apiEndpoint = 'https://www.thecolorapi.com/id?hex=';
 function fetchData(colorId) {
   return new Promise((resolve, reject) => {
-    $.getJSON(apiEndpoint + colorId, function (data) {
+    $.getJSON(apiEndpoint + colorId, (data) => {
       const colorData = {
         image: data.image.bare,
-        name: data.name.value
+        name: data.name.value,
       };
       resolve(colorData);
-    }).fail(function () {
-      reject(`Error loading color for hex: ${colorId}`);
+    }).fail(() => {
+      reject(new Error(`Error loading color for hex: ${colorId}`));
     });
   });
 }
@@ -33,27 +33,41 @@ const hsvToHex = (h, s, v) => {
   const t = v * (1 - (1 - f) * s);
   switch (i % 6) {
     case 0:
-      (r = v), (g = t), (b = p);
+      r = v;
+      g = t;
+      b = p;
       break;
     case 1:
-      (r = q), (g = v), (b = p);
+      r = q;
+      g = v;
+      b = p;
       break;
     case 2:
-      (r = p), (g = v), (b = t);
+      r = p;
+      g = v;
+      b = t;
       break;
     case 3:
-      (r = p), (g = q), (b = v);
+      r = p;
+      g = q;
+      b = v;
       break;
     case 4:
-      (r = t), (g = p), (b = v);
+      r = t;
+      g = p;
+      b = v;
       break;
     case 5:
-      (r = v), (g = p), (b = q);
+      r = v;
+      g = p;
+      b = q;
       break;
+    default:
+      console.log('Unknown status');
   }
   const toHex = (x) => {
     const hex = Math.round(x * 255).toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
+    return hex.length === 1 ? `0${hex}` : hex;
   };
   return toHex(r) + toHex(g) + toHex(b);
 };
@@ -62,12 +76,12 @@ const renderCards = (pageSize, pageIndex) => {
   $('#cards').empty();
   const visibleCards = colors.slice(
     (pageIndex - 1) * pageSize,
-    pageIndex * pageSize
+    pageIndex * pageSize,
   );
   visibleCards.forEach((color) => {
     const image = $('<img>').attr({
       src: color.image,
-      alt: color.name
+      alt: color.name,
     });
     $('#cards').append(image);
   });
@@ -79,12 +93,12 @@ $(() => {
       position: {
         my: 'top',
         at: 'top',
-        of: '#cards'
+        of: '#cards',
       },
       visible: false,
       showIndicator: true,
       showPane: true,
-      hideOnOutsideClick: false
+      hideOnOutsideClick: false,
     })
     .dxLoadPanel('instance');
   const pagination = $('#pagination')
@@ -110,14 +124,14 @@ $(() => {
 
           renderCards(pageSize, pageIndex);
         }
-      }
+      },
     })
     .dxPagination('instance');
   async function generateColors() {
     console.log(loadPanel);
     loadPanel.show();
     const promises = [];
-    for (let i = 0; i < total; i++) {
+    for (let i = 0; i < total; i += 1) {
       const hex = getRandomPastelColor();
       promises.push(fetchData(hex));
     }
