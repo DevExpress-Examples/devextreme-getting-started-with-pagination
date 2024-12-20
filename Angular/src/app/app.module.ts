@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular/ui/load-panel';
 import { DxPaginationModule } from 'devextreme-angular/ui/pagination';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component'
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,7 @@ import { AppComponent } from './app.component'
     AppRoutingModule,
     DxLoadPanelModule,
     DxPaginationModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

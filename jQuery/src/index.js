@@ -1,6 +1,6 @@
 const total = 100;
 let colors = [];
-const apiEndpoint = "https://www.thecolorapi.com/id?hex=";
+const apiEndpoint = 'https://www.thecolorapi.com/id?hex=';
 function fetchData(colorId) {
   return new Promise((resolve, reject) => {
     $.getJSON(apiEndpoint + colorId, function (data) {
@@ -23,7 +23,9 @@ const getRandomPastelColor = () => {
 };
 
 const hsvToHex = (h, s, v) => {
-  let r, g, b;
+  let r = 0;
+  let g = 0;
+  let b = 0;
   const i = Math.floor(h / 60);
   const f = h / 60 - i;
   const p = v * (1 - s);
@@ -51,41 +53,41 @@ const hsvToHex = (h, s, v) => {
   }
   const toHex = (x) => {
     const hex = Math.round(x * 255).toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
+    return hex.length === 1 ? '0' + hex : hex;
   };
   return toHex(r) + toHex(g) + toHex(b);
 };
 
 const renderCards = (pageSize, pageIndex) => {
-  $("#cards").empty();
+  $('#cards').empty();
   const visibleCards = colors.slice(
     (pageIndex - 1) * pageSize,
     pageIndex * pageSize
   );
   visibleCards.forEach((color) => {
-    const image = $("<img>").attr({
+    const image = $('<img>').attr({
       src: color.image,
       alt: color.name
     });
-    $("#cards").append(image);
+    $('#cards').append(image);
   });
 };
 
 $(() => {
-  const loadPanel = $("#load-panel")
+  const loadPanel = $('#load-panel')
     .dxLoadPanel({
       position: {
-        my: "top",
-        at: "top",
-        of: "#cards"
+        my: 'top',
+        at: 'top',
+        of: '#cards'
       },
       visible: false,
       showIndicator: true,
       showPane: true,
       hideOnOutsideClick: false
     })
-    .dxLoadPanel("instance");
-  const pagination = $("#pagination")
+    .dxLoadPanel('instance');
+  const pagination = $('#pagination')
     .dxPagination({
       showInfo: true,
       showNavigationButtons: true,
@@ -93,24 +95,24 @@ $(() => {
       pageIndex: 3,
       pageSize: 5,
       onOptionChanged: (e) => {
-        if (e.name === "pageSize") {
+        if (e.name === 'pageSize') {
           const pageSize = e.value;
-          pagination.option("pageSize", pageSize);
-          const pageIndex = pagination.option("pageIndex");
+          pagination.option('pageSize', pageSize);
+          const pageIndex = pagination.option('pageIndex');
 
           renderCards(pageSize, pageIndex);
         }
 
-        if (e.name === "pageIndex") {
-          const pageSize = pagination.option("pageSize");
+        if (e.name === 'pageIndex') {
+          const pageSize = pagination.option('pageSize');
           const pageIndex = e.value;
-          pagination.option("pageIndex", pageIndex);
+          pagination.option('pageIndex', pageIndex);
 
           renderCards(pageSize, pageIndex);
         }
       }
     })
-    .dxPagination("instance");
+    .dxPagination('instance');
   async function generateColors() {
     console.log(loadPanel);
     loadPanel.show();

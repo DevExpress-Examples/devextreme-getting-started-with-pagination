@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ColorService } from './app.service';
 import { firstValueFrom } from 'rxjs';
+import { ColorService, Color } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +9,18 @@ import { firstValueFrom } from 'rxjs';
   providers: [ColorService],
 })
 export class AppComponent {
-  loadPanelVisible: boolean = false;
-  total: number = 100;
-  colors: Array<{ name: string; image: string }> = [];
-  visibleCards: Array<{ name: string; image: string }> = [];
-  pageIndex: number = 3;
-  pageSize: number = 5;
+  loadPanelVisible = false;
+
+  total = 100;
+
+  colors: Color[] = [];
+
+  visibleCards: Color[] = [];
+  
+  pageIndex = 3;
+  
+  pageSize = 5;
+  
   constructor(private colorService: ColorService) {}
 
   ngOnInit(): void {
