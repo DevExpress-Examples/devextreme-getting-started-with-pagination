@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -52,6 +53,6 @@ export class ColorService {
 }
 
 export interface Color {
-  image: string;
-  name: string;
+  name: { value: string };
+  image: { bare: string };
 }

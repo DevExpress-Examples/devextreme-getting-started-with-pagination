@@ -2,7 +2,9 @@ import axios from 'axios';
 
 const apiEndpoint = 'https://www.thecolorapi.com/id?hex=';
 
-export const fetchColorData = async (hex: string): Promise<{ name: string; image: string } | null> => {
+export const fetchColorData = async (
+    hex: string,
+): Promise<{ name: string; image: string } | null> => {
     try {
         const response = await axios.get(`${apiEndpoint}${hex}`);
         return {

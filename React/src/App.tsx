@@ -1,4 +1,5 @@
 /* eslint-disable space-before-function-paren */
+/* eslint-disable no-console */
 import React, {
   useEffect, useState, useCallback, useRef,
 } from 'react';
@@ -42,7 +43,6 @@ function App(): JSX.Element {
     try {
       const results = await Promise.all(promises);
       const filteredColors = results.filter((color): color is Color => color !== null);
-      console.log(filteredColors);
       setColors(filteredColors);
     } catch (error) {
       console.error('Error generating colors:', error);

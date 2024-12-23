@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 
 const apiEndpoint = 'https://www.thecolorapi.com/id?hex=';

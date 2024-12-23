@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Component } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ColorService, Color } from './app.service';
@@ -24,6 +25,7 @@ export class AppComponent {
   constructor(private readonly colorService: ColorService) {}
 
   ngOnInit(): void {
+    // eslint-disable-next-line no-void
     void this.generateColors();
   }
 
