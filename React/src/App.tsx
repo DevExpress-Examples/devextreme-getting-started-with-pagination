@@ -1,4 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+/* eslint-disable space-before-function-paren */
+import React, {
+  useEffect, useState, useCallback, useRef,
+} from 'react';
 import './App.css';
 import 'devextreme/dist/css/dx.material.blue.light.compact.css';
 import LoadPanel, { Position } from 'devextreme-react/load-panel';
@@ -13,73 +16,63 @@ interface Color {
 }
 
 function App(): JSX.Element {
+  const isMounted = useRef(false);
   const [loadPanelVisible, setLoadPanelVisible] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(5);
   const [pageIndex, setPageIndex] = useState<number>(3);
   const [colors, setColors] = useState<Color[]>([]);
   const [visibleCards, setVisibleCards] = useState<Color[]>([]);
-  const [loadingComplete, setLoadingComplete] = useState<boolean>(false); // Track entire loading/rendering state
 
-  // Get visible cards based on pageIndex and pageSize
-  function getVisibleCards(currentPageIndex: number, currentPageSize: number): void {
-    if (colors.length > 0) {
-      const startIndex = (currentPageIndex - 1) * currentPageSize;
-      const endIndex = startIndex + currentPageSize;
-      const pageColors = colors.slice(startIndex, endIndex);
-      if (pageColors.length < currentPageSize) {
-        console.warn(
-          `Expected ${currentPageSize} visible cards but only found ${pageColors.length}. Check pagination.`,
-        );
-      }
-      setVisibleCards(pageColors);
-    }
-  }
+  const getVisibleCards = useCallback((currentPageIndex: number, currentPageSize: number): void => {
+    const startIndex = (currentPageIndex - 1) * currentPageSize;
+    const endIndex = startIndex + currentPageSize;
+    const pageColors = colors.slice(startIndex, endIndex);
+    setVisibleCards(pageColors);
+    setLoadPanelVisible(false);
+  }, [colors, visibleCards]);
 
-  const onPageIndexChange = useCallback((value: number) => {
-    setPageIndex(value);
-    getVisibleCards(value, pageSize);
-  }, [pageSize, colors]);
-  const onPageSizeChange = useCallback((value: number) => {
-    setPageSize(value);
-    getVisibleCards(pageIndex, value);
-  }, [pageIndex, colors]);
-  async function generateColors(total: number, pageIndex: number, pageSize: number): Promise<void> {
+  const generateColors = useCallback(async (total: number): Promise<void> => {
     setLoadPanelVisible(true);
-    setLoadingComplete(false); // Reset loading state
     const promises: Promise<Color | null>[] = [];
     for (let i = 0; i < total; i++) {
       const hex = getRandomPastelColor();
       promises.push(fetchColorData(hex));
     }
+
     try {
       const results = await Promise.all(promises);
-      // Filter out null results and ensure the array length matches the total
       const filteredColors = results.filter((color): color is Color => color !== null);
-      if (filteredColors.length < total) {
-        console.warn(`Expected ${total} colors but received ${filteredColors.length}.`);
-      }
+      console.log(filteredColors);
       setColors(filteredColors);
-      // Calculate visible cards after setting all colors
-      getVisibleCards(pageIndex, pageSize);
     } catch (error) {
       console.error('Error generating colors:', error);
-    } finally {
-      setLoadingComplete(true);
     }
-  }
-  // Load initial data on mount
-  useEffect(() => {
-    generateColors(total, pageIndex, pageSize).catch((error) => {
-      console.error('Error initializing colors:', error);
-    });
-  }, []); // Only run on initial mount
+  }, [total]);
 
-  // Hide LoadPanel when rendering is complete
+  const onPageIndexChange = useCallback((value: number) => {
+    setPageIndex(value);
+    getVisibleCards(value, pageSize);
+  }, [pageSize, getVisibleCards]);
+
+  const onPageSizeChange = useCallback((value: number) => {
+    setPageSize(value);
+    getVisibleCards(pageIndex, value);
+  }, [pageIndex, getVisibleCards]);
+
   useEffect(() => {
-    if (loadingComplete && visibleCards.length > 0) {
-      setLoadPanelVisible(false);
+    if (!isMounted.current) {
+      isMounted.current = true; // Mark as mounted
+      generateColors(total).catch((error) => {
+        console.error('Error initializing colors:', error);
+      });
     }
-  }, [loadingComplete, visibleCards]);
+  }, []);
+
+  useEffect(() => {
+    if (colors.length > 0) {
+      getVisibleCards(pageIndex, pageSize);
+    }
+  }, [colors]);
 
   return (
     <div className="main">
