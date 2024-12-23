@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -44,10 +43,7 @@ export class ColorService {
 
   fetchColorData(hex: string): Observable<Color> {
     return this.http.get<Color>(`${this.apiEndpoint}${hex}`).pipe(
-      catchError((error) => {
-        console.error(`Error fetching color for hex ${hex}:`, error);
-        return throwError(() => error);
-      }),
+      catchError((error: any) => throwError(() => new Error(`Error fetching color: ${error.message || error}`))),
     );
   }
 }
