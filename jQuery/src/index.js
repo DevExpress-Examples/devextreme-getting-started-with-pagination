@@ -1,3 +1,4 @@
+/* eslint-disable no-console, default-case */
 const total = 100;
 let colors = [];
 const hexCodes = [];
@@ -31,7 +32,9 @@ const getRandomPastelColor = () => {
 };
 
 const hsvToHex = (h, s, v) => {
-  let r = 0, g = 0, b = 0;
+  let r = 0;
+  let g = 0;
+  let b = 0;
   const i = Math.floor(h / 60);
   const f = h / 60 - i;
   const p = v * (1 - s);
@@ -75,7 +78,7 @@ const renderCards = async (pageSize, pageIndex) => {
 };
 
 $(() => {
-  for (let i = 0; i < total; i++) {
+  for (let i = 0; i < total; i+=1) {
     hexCodes.push(getRandomPastelColor());
   }
 

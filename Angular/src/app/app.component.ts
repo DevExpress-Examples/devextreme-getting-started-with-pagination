@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion, no-else-return, no-console, no-void */
 import { Component } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ColorService, Color } from './app.service';
