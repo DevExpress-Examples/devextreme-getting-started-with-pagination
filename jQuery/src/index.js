@@ -78,7 +78,7 @@ const renderCards = async (pageSize, pageIndex) => {
 };
 
 $(() => {
-  for (let i = 0; i < total; i+=1) {
+  for (let i = 0; i < total; i += 1) {
     hexCodes.push(getRandomPastelColor());
   }
 
