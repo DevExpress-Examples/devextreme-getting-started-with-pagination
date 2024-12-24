@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Component } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ColorService, Color } from './app.service';
@@ -14,7 +13,9 @@ export class AppComponent {
 
   total = 100;
 
-  colors: Color[] = [];
+  colors: Map<string, Color> = new Map();
+
+  hexCodes: string[] = [];
 
   visibleCards: Color[] = [];
 
@@ -25,44 +26,55 @@ export class AppComponent {
   constructor(private readonly colorService: ColorService) {}
 
   ngOnInit(): void {
-    // eslint-disable-next-line no-void
-    void this.generateColors();
+    this.generateHexCodes();
+    this.updateVisibleCards();
   }
 
-  async generateColors(): Promise<void> {
-    this.loadPanelVisible = true;
-    const promises: Promise<any>[] = [];
-
+  generateHexCodes(): void {
     for (let i = 0; i < this.total; i++) {
-      const hex = this.colorService.getRandomPastelColor();
-      const promise = firstValueFrom(
-        this.colorService.fetchColorData(hex),
-      ).then((data) => ({ name: data.name.value, image: data.image.bare }));
-
-      promises.push(promise);
+      this.hexCodes.push(this.colorService.getRandomPastelColor());
     }
+  }
 
+  async fetchColorsForPage(): Promise<void> {
+    const startIndex = (this.pageIndex - 1) * this.pageSize;
+    const endIndex = this.pageIndex * this.pageSize;
+    const hexSubset = this.hexCodes.slice(startIndex, endIndex);
+
+    const promises: Promise<Color>[] = hexSubset.map((hex) => {
+      if (this.colors.has(hex)) {
+        return Promise.resolve(this.colors.get(hex)!);
+      } else {
+        return firstValueFrom(this.colorService.fetchColorData(hex)).then((data) => {
+          const colorData: Color = data;
+          this.colors.set(hex, colorData);
+          return colorData;
+        });
+      }
+    });
+
+    this.loadPanelVisible = true;
     try {
-      this.colors = await Promise.all(promises);
+      const fetchedColors = await Promise.all(promises);
+      this.visibleCards = fetchedColors;
     } catch (error) {
-      console.error('Error generating colors:', error);
+      console.error('Error fetching colors:', error);
     } finally {
-      this.setVisibleCards();
       this.loadPanelVisible = false;
     }
   }
 
   onPageIndexChange(val: number): void {
     this.pageIndex = val;
-    this.setVisibleCards();
+    void this.fetchColorsForPage();
   }
 
   onPageSizeChange(val: number): void {
     this.pageSize = val;
-    this.setVisibleCards();
+    void this.fetchColorsForPage();
   }
 
-  setVisibleCards(): void {
-    this.visibleCards = this.colors.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize);
+  updateVisibleCards(): void {
+    void this.fetchColorsForPage();
   }
 }

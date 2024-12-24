@@ -18,7 +18,7 @@
   </dx-pagination>
   <div id="cards">
     <ng-container *ngFor="let color of visibleCards">
-      <img [src]="color.image" [alt]="color.name" />
+      <img [src]="color.image.bare" [alt]="color.name.value" />
     </ng-container>
   </div>
 </div>

@@ -17,62 +17,62 @@ interface Color {
 }
 
 function App(): JSX.Element {
-  const isMounted = useRef(false);
   const [loadPanelVisible, setLoadPanelVisible] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(5);
   const [pageIndex, setPageIndex] = useState<number>(3);
-  const [colors, setColors] = useState<Color[]>([]);
   const [visibleCards, setVisibleCards] = useState<Color[]>([]);
 
-  const getVisibleCards = useCallback((currentPageIndex: number, currentPageSize: number): void => {
-    const startIndex = (currentPageIndex - 1) * currentPageSize;
-    const endIndex = startIndex + currentPageSize;
-    const pageColors = colors.slice(startIndex, endIndex);
-    setVisibleCards(pageColors);
-    setLoadPanelVisible(false);
-  }, [colors, visibleCards]);
+  const hexCodes = useRef<string[]>([]);
+  const colorsCache = useRef<Map<string, Color>>(new Map());
 
-  const generateColors = useCallback(async (total: number): Promise<void> => {
-    setLoadPanelVisible(true);
-    const promises: Promise<Color | null>[] = [];
+  useEffect(() => {
     for (let i = 0; i < total; i++) {
-      const hex = getRandomPastelColor();
-      promises.push(fetchColorData(hex));
+      hexCodes.current.push(getRandomPastelColor());
     }
+  }, []);
+
+  const fetchColorsForPage = useCallback(async (): Promise<void> => {
+    setLoadPanelVisible(true);
+    const startIndex = (pageIndex - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const hexSubset = hexCodes.current.slice(startIndex, endIndex);
+
+    const promises = hexSubset.map((hex) => {
+      if (colorsCache.current.has(hex)) {
+        return Promise.resolve(colorsCache.current.get(hex));
+      }
+      return fetchColorData(hex).then((color) => {
+        if (color) {
+          colorsCache.current.set(hex, color);
+        }
+        return color;
+      });
+    });
 
     try {
       const results = await Promise.all(promises);
       const filteredColors = results.filter((color): color is Color => color !== null);
-      setColors(filteredColors);
+      setVisibleCards(filteredColors);
     } catch (error) {
-      console.error('Error generating colors:', error);
+      console.error('Error fetching colors:', error);
+    } finally {
+      setLoadPanelVisible(false);
     }
-  }, [total]);
+  }, [pageIndex, pageSize]);
 
   const onPageIndexChange = useCallback((value: number) => {
     setPageIndex(value);
-    getVisibleCards(value, pageSize);
-  }, [pageSize, getVisibleCards]);
+  }, []);
 
   const onPageSizeChange = useCallback((value: number) => {
     setPageSize(value);
-    getVisibleCards(pageIndex, value);
-  }, [pageIndex, getVisibleCards]);
-
-  useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true; // Mark as mounted
-      generateColors(total).catch((error) => {
-        console.error('Error initializing colors:', error);
-      });
-    }
   }, []);
 
   useEffect(() => {
-    if (colors.length > 0) {
-      getVisibleCards(pageIndex, pageSize);
-    }
-  }, [colors]);
+    fetchColorsForPage().catch((error) => {
+      console.error('Error updating visible cards:', error);
+    });
+  }, [fetchColorsForPage]);
 
   return (
     <div className="main">
@@ -94,8 +94,8 @@ function App(): JSX.Element {
         onPageSizeChange={onPageSizeChange}
       />
       <div id="cards">
-        {visibleCards.map((color) => (
-          <div key={color.name}>
+        {visibleCards.map((color, index) => (
+          <div key={index}>
             <img src={color.image} alt={color.name} />
           </div>
         ))}
