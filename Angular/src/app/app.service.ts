@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -42,13 +42,20 @@ export class ColorService {
   }
 
   fetchColorData(hex: string): Observable<Color> {
-    return this.http.get<Color>(`${this.apiEndpoint}${hex}`).pipe(
-      catchError((error: any) => throwError(() => new Error(`Error fetching color: ${error.message || error}`))),
-    );
+    return this.http.get<any>(`${this.apiEndpoint}${hex}`)
+      .pipe(
+        catchError((error: any) => throwError(() => new Error(`Error fetching color: ${error.message || error}`))),
+      )
+      .pipe(map((data: any) => {
+        return {
+          name: data.name.value,
+          image: data.image.bare,
+        }
+    }));
   }
 }
 
 export interface Color {
-  name: { value: string };
-  image: { bare: string };
+  image: string;
+  name: string;
 }

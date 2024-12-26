@@ -28,7 +28,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.generateHexCodes();
-    this.updateVisibleCards();
+    this.fetchColorsForPage();
   }
 
   generateHexCodes(): void {
@@ -75,7 +75,4 @@ export class AppComponent {
     void this.fetchColorsForPage();
   }
 
-  updateVisibleCards(): void {
-    void this.fetchColorsForPage();
-  }
 }

@@ -1,6 +1,5 @@
 /* eslint-disable no-console, default-case */
 const total = 100;
-let colors = [];
 const hexCodes = [];
 const apiEndpoint = 'https://www.thecolorapi.com/id?hex=';
 const cache = new Map();
