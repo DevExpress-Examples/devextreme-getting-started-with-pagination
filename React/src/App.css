@@ -2,3 +2,9 @@
   margin: 50px;
   width: 90vh;
 }
+
+#cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
