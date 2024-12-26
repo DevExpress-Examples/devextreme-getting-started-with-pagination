@@ -46,12 +46,10 @@ export class ColorService {
       .pipe(
         catchError((error: any) => throwError(() => new Error(`Error fetching color: ${error.message || error}`))),
       )
-      .pipe(map((data: any) => {
-        return {
-          name: data.name.value,
-          image: data.image.bare,
-        }
-    }));
+      .pipe(map((data: any) => ({
+        name: data.name.value,
+        image: data.image.bare,
+      })));
   }
 }
 
