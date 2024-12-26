@@ -19,8 +19,8 @@ export const fetchColorData = async (
 
 export const getRandomPastelColor = (): string => {
     const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.random() * 0.4 + 0.2; // 20% to 60% saturation
-    const brightness = Math.random() * 0.3 + 0.7; // 70% to 100% brightness
+    const saturation = Math.random() * 0.4 + 0.2;
+    const brightness = Math.random() * 0.3 + 0.7;
     return hsvToHex(hue, saturation, brightness);
 };
 

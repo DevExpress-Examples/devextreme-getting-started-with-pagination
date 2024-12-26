@@ -63,7 +63,6 @@ const renderCards = async (pageSize, pageIndex) => {
   const promises = hexSubset.map((hex) => fetchData(hex));
   try {
     const pageColors = await Promise.all(promises);
-    colors = [...colors, ...pageColors];
     pageColors.forEach((color) => {
       const image = $('<img>').attr({
         src: color.image,
@@ -100,7 +99,7 @@ $(() => {
       showInfo: true,
       showNavigationButtons: true,
       itemCount: total,
-      pageIndex: 1,
+      pageIndex: 3,
       pageSize: 5,
       onOptionChanged: (e) => {
         if (e.name === 'pageSize' || e.name === 'pageIndex') {
