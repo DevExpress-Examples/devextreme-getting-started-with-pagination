@@ -1,5 +1,3 @@
-/* eslint-disable space-before-function-paren */
-/* eslint-disable no-console */
 import React, {
   useEffect, useState, useCallback, useRef,
 } from 'react';
