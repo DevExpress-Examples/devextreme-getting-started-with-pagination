@@ -1,4 +1,4 @@
-import React, {
+import {
   useEffect, useState, useCallback, useRef,
 } from 'react';
 import './App.css';
@@ -29,6 +29,7 @@ function App(): JSX.Element {
     }
   }, []);
 
+  // eslint-disable-next-line space-before-function-paren
   const fetchColorsForPage = useCallback(async (): Promise<void> => {
     setLoadPanelVisible(true);
     const startIndex = (pageIndex - 1) * pageSize;
@@ -52,6 +53,7 @@ function App(): JSX.Element {
       const filteredColors = results.filter((color): color is Color => color !== null);
       setVisibleCards(filteredColors);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching colors:', error);
     } finally {
       setLoadPanelVisible(false);
@@ -68,6 +70,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     fetchColorsForPage().catch((error) => {
+      // eslint-disable-next-line no-console
       console.error('Error updating visible cards:', error);
     });
   }, [fetchColorsForPage]);
