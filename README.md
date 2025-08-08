@@ -20,7 +20,7 @@ This repository stores code for the following DevExpress tutorial: [Getting Star
 - **Vue**
     - [Home.vue](Vue/src/components/HomeContent.vue)
 - **React**
-    - [App.js](React/src/App.js)
+    - [App.tsx](React/src/App.tsx)
 
 ## Documentation
 
