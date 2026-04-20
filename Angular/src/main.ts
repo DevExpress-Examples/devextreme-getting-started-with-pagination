@@ -1,9 +1,8 @@
-import { provideZoneChangeDetection } from "@angular/core";
-/* eslint-disable no-console */
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { AppComponent } from './app/app.component';
 
-import { AppModule } from './app/app.module';
-
-platformBrowserDynamic().bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], })
-  // @ts-expect-warning: `console.error` is used here intentionally for simple error logging during bootstrap
-  .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [provideZoneChangeDetection(), provideHttpClient()],
+}).catch((err) => console.error(err));

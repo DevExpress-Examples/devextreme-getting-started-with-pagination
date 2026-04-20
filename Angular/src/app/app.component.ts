@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, no-else-return, no-console, no-void */
 import { Component } from '@angular/core';
+import { DxLoadPanelModule } from 'devextreme-angular/ui/load-panel';
+import { DxPaginationModule } from 'devextreme-angular/ui/pagination';
 import { firstValueFrom } from 'rxjs';
 import { ColorService, Color } from './app.service';
 
 @Component({
     selector: 'app-root',
+    imports: [DxLoadPanelModule, DxPaginationModule],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     providers: [ColorService],
-    standalone: false
 })
 export class AppComponent {
   loadPanelVisible = false;
