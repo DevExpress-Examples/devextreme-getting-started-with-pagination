@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion, no-else-return, no-console, no-void */
 import { Component } from '@angular/core';
 import { DxLoadPanelModule } from 'devextreme-angular/ui/load-panel';
 import { DxPaginationModule } from 'devextreme-angular/ui/pagination';

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
