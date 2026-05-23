@@ -6,11 +6,11 @@ import { firstValueFrom } from 'rxjs';
 import { ColorService, Color } from './app.service';
 
 @Component({
-    selector: 'app-root',
-    imports: [DxLoadPanelModule, DxPaginationModule],
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    providers: [ColorService],
+  selector: 'app-root',
+  imports: [DxLoadPanelModule, DxPaginationModule],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  providers: [ColorService],
 })
 export class AppComponent {
   loadPanelVisible = false;
