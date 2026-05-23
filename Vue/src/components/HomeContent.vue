@@ -6,7 +6,11 @@
       :show-pane="true"
       :hide-on-outside-click="false"
     >
-      <DxPosition my="top" at="top" of="#cards" />
+      <DxPosition
+        my="top"
+        at="top"
+        of="#cards"
+      />
     </DxLoadPanel>
     <DxPagination
       :show-info="true"
@@ -18,8 +22,14 @@
       @update:page-size="onPageSizeChange"
     />
     <div id="cards">
-      <div v-for="color in visibleCards" :key="color.name">
-        <img :src="color.image" :alt="color.name" />
+      <div
+        v-for="color in visibleCards"
+        :key="color.name"
+      >
+        <img
+          :src="color.image"
+          :alt="color.name"
+        >
       </div>
     </div>
   </div>
@@ -52,7 +62,7 @@ const generateHexCodes = () => {
   }
 };
 
-const fetchColorsForPage = async () => {
+const fetchColorsForPage = async() => {
   loadPanelVisible.value = true;
   const startIndex = (pageIndex.value - 1) * pageSize.value;
   const endIndex = startIndex + pageSize.value;
