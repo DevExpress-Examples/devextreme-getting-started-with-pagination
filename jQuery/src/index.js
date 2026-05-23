@@ -1,4 +1,3 @@
-/* eslint-disable no-console, default-case */
 const total = 100;
 const hexCodes = [];
 const apiEndpoint = 'https://www.thecolorapi.com/id?hex=';
