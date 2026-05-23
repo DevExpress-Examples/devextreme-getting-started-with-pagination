@@ -29,7 +29,6 @@ function App(): JSX.Element {
     }
   }, []);
 
-  // eslint-disable-next-line space-before-function-paren
   const fetchColorsForPage = useCallback(async (): Promise<void> => {
     setLoadPanelVisible(true);
     const startIndex = (pageIndex - 1) * pageSize;

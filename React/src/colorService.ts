@@ -16,13 +16,6 @@ export async function fetchColorData(hex: string): Promise<{ name: string; image
   }
 }
 
-export function getRandomPastelColor(): string {
-  const hue = Math.floor(Math.random() * 360);
-  const saturation = Math.random() * 0.4 + 0.2;
-  const brightness = Math.random() * 0.3 + 0.7;
-  return hsvToHex(hue, saturation, brightness);
-}
-
 function hsvToHex(h: number, s: number, v: number): string {
   let r = 0;
   let g = 0;
@@ -50,4 +43,11 @@ function hsvToHex(h: number, s: number, v: number): string {
     return Math.round(x * 255).toString(16).padStart(2, '0');
   }
   return `${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+export function getRandomPastelColor(): string {
+  const hue = Math.floor(Math.random() * 360);
+  const saturation = Math.random() * 0.4 + 0.2;
+  const brightness = Math.random() * 0.3 + 0.7;
+  return hsvToHex(hue, saturation, brightness);
 }
