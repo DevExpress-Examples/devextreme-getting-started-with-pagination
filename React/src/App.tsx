@@ -52,7 +52,6 @@ function App(): JSX.Element {
       const filteredColors = results.filter((color): color is Color => color !== null);
       setVisibleCards(filteredColors);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Error fetching colors:', error);
     } finally {
       setLoadPanelVisible(false);
@@ -69,7 +68,6 @@ function App(): JSX.Element {
 
   useEffect(() => {
     fetchColorsForPage().catch((error) => {
-      // eslint-disable-next-line no-console
       console.error('Error updating visible cards:', error);
     });
   }, [fetchColorsForPage]);
