@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DxLoadPanelModule } from 'devextreme-angular/ui/load-panel';
 import { DxPaginationModule } from 'devextreme-angular/ui/pagination';
 import { firstValueFrom } from 'rxjs';
@@ -9,6 +9,7 @@ import { ColorService, Color } from './app.service';
   imports: [DxLoadPanelModule, DxPaginationModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ColorService],
 })
 export class AppComponent {
